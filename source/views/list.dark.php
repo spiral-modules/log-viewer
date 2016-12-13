@@ -12,7 +12,7 @@
             [[Remove all]]
         </vault:uri>
 
-        <vault:uri target="logs:edit" icon="edit" class="btn teal waves-effect waves-light"
+        <vault:uri target="logs:log" icon="edit" class="btn teal waves-effect waves-light"
                    options="<?= ['id' => $lastLog->getName()] ?>">
             [[View last]]
         </vault:uri>
