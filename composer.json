@@ -1,0 +1,20 @@
+{
+  "name": "spiral/log-viewer",
+  "description": "Vault component with ability to view logs in the vault panel.",
+  "authors": [
+    {
+      "name": "Valentin V / vvval",
+      "email": "vintsukevich@gmail.com"
+    }
+  ],
+  "require": {
+    "spiral/vault": "*",
+    "symfony/filesystem": "~2.3|~3.0.0",
+    "symfony/finder": "^2.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Spiral\\": "source/"
+    }
+  }
+}
