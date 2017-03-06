@@ -93,11 +93,11 @@ class LogService
     public function removeLog(LogFile $filename)
     {
         foreach ($this->config->directories() as $directory) {
-            if (!file_exists($directory . $filename->filename())) {
+            if (!file_exists($directory . $filename->name())) {
                 continue;
             }
 
-            $this->files->delete($directory . $filename->filename());
+            $this->files->delete($directory . $filename->name());
 
             return;
         }
@@ -110,7 +110,7 @@ class LogService
     {
         /** @var SplFileInfo $file */
         foreach ($this->finder->in($this->config->directories()) as $file) {
-            $this->files->delete($file->getPathname());
+            $this->files->delete($file->getRealPath());
         }
     }
 }

@@ -12,7 +12,7 @@ return [
      */
     'directories' => [
         //Data entities
-        directory('root') . '../../source/Snapshotter/',
+        directory('root') . '../../source/LogViewer/',
 
         /*{{directories}}*/
     ],

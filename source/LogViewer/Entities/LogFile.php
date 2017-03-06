@@ -31,15 +31,15 @@ class LogFile
     /**
      * @return string
      */
-    public function pathname(): string
+    public function filename(): string
     {
-        return $this->file->getPathname();
+        return $this->file->getRealPath();
     }
 
     /**
      * @return string
      */
-    public function filename(): string
+    public function name(): string
     {
         return $this->file->getFilename();
     }

@@ -26,8 +26,8 @@
             <div class="row">
                 <div class="col s12 m10">
                     <p>
-                        <?= $lastLog->filename() ?>
-                        <span class="grey-text">(<?= $lastLog->pathname() ?>)</span>
+                        <?= $lastLog->name() ?>
+                        <span class="grey-text">(<?= $lastLog->filename() ?>)</span>
                     </p>
                     <p>
                         <?= $timestamps->getTime($lastLog->timestamp()) ?>
@@ -40,7 +40,7 @@
                     <vault:guard permission="vault.logs.view">
                         <vault:uri target="logs:view" icon="edit"
                                    class="btn teal waves-effect waves-light"
-                                   options="<?= ['filename' => $lastLog->filename()] ?>">
+                                   options="<?= ['filename' => $lastLog->name()] ?>">
                             [[View last]]
                         </vault:uri>
                     </vault:guard>
@@ -51,7 +51,7 @@
 
     <vault:grid source="<?= $selector ?>" as="entity" color="teal">
         <grid:cell label="[[Filename:]]">
-            <span title="<?= $entity->pathname() ?>"><?= $entity->filename() ?></span>
+            <span title="<?= $entity->filename() ?>"><?= $entity->name() ?></span>
         </grid:cell>
         <grid:cell label="[[Last updated:]]">
             <?= $timestamps->getTime($entity->timestamp()) ?>
@@ -63,15 +63,13 @@
         <grid:cell style="text-align:right">
             <vault:guard permission="vault.logs.view">
                 <vault:uri target="logs:view" icon="edit"
-                           options="<?= ['filename' => $entity->filename()] ?>"
+                           options="<?= ['filename' => $entity->name()] ?>"
                            class="btn-flat waves-effect"/>
             </vault:guard>
-        </grid:cell>
-        <grid:cell style="text-align:right">
             <vault:guard permission="vault.logs.remove">
                 <vault:uri target="logs:remove" icon="delete"
                            class="btn red waves-effect waves-light"
-                           options="<?= ['filename' => $entity->filename()] ?>"></vault:uri>
+                           options="<?= ['filename' => $entity->name()] ?>"></vault:uri>
             </vault:guard>
         </grid:cell>
     </vault:grid>

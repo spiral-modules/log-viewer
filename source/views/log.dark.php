@@ -4,12 +4,12 @@
  * @var \Spiral\LogViewer\Helpers\Timestamps $timestamps
  */
 ?>
-<extends:vault:layout title="[[Vault : <?= $log->filename() ?> log]]" class="wide-content"/>
+<extends:vault:layout title="[[Vault : <?= $log->name() ?> log]]" class="wide-content"/>
 
 <define:actions>
     <vault:guard permission="vault.logs.remove">
         <vault:uri target="logs:remove" icon="delete" class="btn red waves-effect waves-light"
-                   options="<?= ['filename' => $log->filename()] ?>">
+                   options="<?= ['filename' => $log->name()] ?>">
             [[Remove all]]
         </vault:uri>
     </vault:guard>
@@ -21,7 +21,7 @@
 <define:actions>
     <vault:guard permission="vault.logs.remove">
         <vault:uri target="logs:remove" icon="delete" class="btn red waves-effect waves-light"
-                   options="<?= ['filename' => $log->filename(), 'backToList' => 1] ?>">
+                   options="<?= ['filename' => $log->name(), 'backToList' => 1] ?>">
             [[Remove]]
         </vault:uri>
     </vault:guard>
@@ -34,8 +34,8 @@
     <vault:guard permission="vault.logs.view">
         <vault:card>
             <p>
-                <?= $log->filename() ?>
-                <span class="grey-text">(<?= $log->pathname() ?>)</span>
+                <?= $log->name() ?>
+                <span class="grey-text">(<?= $log->filename() ?>)</span>
             </p>
             <p class="grey-text">
                 <?= $timestamps->getTime($log->timestamp()) ?>
