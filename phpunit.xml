@@ -22,6 +22,9 @@
     <filter>
         <whitelist>
             <directory>source/LogViewer/</directory>
+            <exclude>
+                <directory suffix=".php">./source/LogViewer/Controllers</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>

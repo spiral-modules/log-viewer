@@ -6,9 +6,9 @@ use Psr\Log\LogLevel;
 use Spiral\Debug\Traits\LoggerTrait;
 use Spiral\LogViewer\Entities\LogFile;
 use Spiral\LogViewer\Services\LogService;
-use Spiral\Tests\BaseTest;
+use Spiral\Tests\HttpTest;
 
-class LogServiceTest extends BaseTest
+class LogServiceTest extends HttpTest
 {
     use LoggerTrait;
 
