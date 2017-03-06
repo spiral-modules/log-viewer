@@ -1,7 +1,9 @@
 <?php
+
 namespace Spiral;
 
 use Spiral\Core\DirectoriesInterface;
+use Spiral\LogViewer\Config;
 use Spiral\Modules\ModuleInterface;
 use Spiral\Modules\PublisherInterface;
 use Spiral\Modules\RegistratorInterface;
@@ -24,12 +26,12 @@ class LogViewerModule implements ModuleInterface
             "'log-viewer' => [",
             "   directory('libraries') . 'spiral/log-viewer/source/views/',",
             "   /*{{namespaces.log-viewer}}*/",
-            "]"
+            "],"
         ]);
 
         //Register controller in navigation config
         $registrator->configure('modules/vault', 'controllers', 'spiral/log-viewer', [
-            "'logs' => \\Spiral\\LogViewer\\Controllers\\LogViewerController::class",
+            "'logs' => \\Spiral\\LogViewer\\Controllers\\LogViewerController::class,",
         ]);
 
         //Register menu item in navigation config
@@ -37,7 +39,7 @@ class LogViewerModule implements ModuleInterface
             "'logs' => [",
             "    'title'    => 'Logs',",
             "    'requires' => 'vault.logs'",
-            "]",
+            "],",
             "/*{{navigation.vault.logs}}*/",
         ]);
     }
@@ -48,5 +50,10 @@ class LogViewerModule implements ModuleInterface
      */
     public function publish(PublisherInterface $publisher, DirectoriesInterface $directories)
     {
+        $publisher->publish(
+            __DIR__ . '/config/viewer.php',
+            $directories->directory('config') . Config::CONFIG . '.php',
+            PublisherInterface::FOLLOW
+        );
     }
 }

@@ -1,29 +1,25 @@
 <?php
+
 namespace Spiral\LogViewer\Controllers;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Spiral\Core\Controller;
-use Spiral\Debug\Debugger;
+use Spiral\Core\Traits\AuthorizesTrait;
 use Spiral\Http\Exceptions\ClientExceptions\NotFoundException;
-use Spiral\Http\Input\InputManager;
-use Spiral\Http\Responses\Responder;
-use Spiral\LogViewer\Models\LogsSource;
-use Spiral\LogViewer\Models\RemoveService;
-use Spiral\Security\Traits\AuthorizesTrait;
+use Spiral\Http\Request\InputManager;
+use Spiral\Http\Response\ResponseWrapper;
+use Spiral\LogViewer\Services\LogService;
+use Spiral\LogViewer\Helpers\Timestamps;
 use Spiral\Translator\Traits\TranslatorTrait;
 use Spiral\Vault\Vault;
 use Spiral\Views\ViewManager;
 
 /**
- * Created by PhpStorm.
- * User: Valentin
- * Date: 09.02.2016
- * Time: 17:47
  *
- * @property InputManager $input
- * @property ViewManager  $views
- * @property Vault        $vault
- * @property Responder    $responses
- * @property Debugger     $debugger
+ * @property InputManager    $input
+ * @property ViewManager     $views
+ * @property Vault           $vault
+ * @property ResponseWrapper $response
  */
 class LogViewerController extends Controller
 {
@@ -32,67 +28,47 @@ class LogViewerController extends Controller
     const GUARD_NAMESPACE = 'vault.logs';
 
     /**
-     * @param LogsSource $source
+     * @param LogService $source
+     * @param Timestamps $timestamps
      * @return string
      */
-    public function indexAction(LogsSource $source)
+    public function indexAction(LogService $source, Timestamps $timestamps)
     {
         return $this->views->render('log-viewer:list', [
-            'source'  => $source->findLogs(),
-            'lastLog' => $source->findLastLog()
+            'selector'   => $source->getLogs(),
+            'lastLog'    => $source->lastLog(),
+            'timestamps' => $timestamps
         ]);
     }
 
     /**
-     * @param string     $id
-     * @param LogsSource $source
+     * @param LogService $source
+     * @param Timestamps $timestamps
      * @return string
      */
-    public function logAction($id, LogsSource $source)
+    public function viewAction(LogService $source, Timestamps $timestamps)
     {
-        $log = $source->findLogByName($id);
+        $filename = $this->input->input('filename');
+        $log = $source->getLogByName($filename);
+
         if (empty($log)) {
             throw new NotFoundException;
         }
 
         $this->authorize('view', compact('log'));
 
-        $rotation = null;
-        if ($log->getCounter() === 1) {
-            $rotation = $log->getLast();
-        }
-
-        return $this->views->render(
-            'log-viewer:log',
-            compact('rotation', 'log')
-        );
+        return $this->views->render('log-viewer:log', compact('log', 'timestamps'));
     }
 
     /**
-     * @param LogsSource $source
-     * @return mixed
-     */
-    public function rotationAction(LogsSource $source)
-    {
-        $rotation = $source->findRotation($this->input->query('filename'));
-        if (empty($rotation)) {
-            throw new NotFoundException;
-        }
-
-        $this->authorize('view', compact('rotation'));
-
-        return $this->views->render('log-viewer:rotation', compact('rotation'));
-    }
-
-    /**
-     * @param RemoveService $remove
+     * @param LogService $source
      * @return array|\Psr\Http\Message\ResponseInterface
      */
-    public function removeAllAction(RemoveService $remove)
+    public function removeAllAction(LogService $source)
     {
         $this->authorize('remove');
 
-        $remove->removeAll();
+        $source->removeAll();
 
         $uri = $this->vault->uri('logs');
         if ($this->input->isAjax()) {
@@ -102,28 +78,30 @@ class LogViewerController extends Controller
                 'action'  => ['redirect' => $uri]
             ];
         } else {
-            return $this->responses->redirect($uri);
+            return $this->response->redirect($uri);
         }
     }
 
     /**
-     * @param string        $id
-     * @param LogsSource    $source
-     * @param RemoveService $remove
+     * @param LogService             $source
+     * @param ServerRequestInterface $request
      * @return array|\Psr\Http\Message\ResponseInterface
      */
-    public function removeLogAction($id, LogsSource $source, RemoveService $remove)
+    public function removeAction(LogService $source, ServerRequestInterface $request)
     {
-        $log = $source->findLogByName($id);
+        $filename = $this->input->input('filename');
+        $log = $source->getLogByName($filename);
+
         if (empty($log)) {
             throw new NotFoundException;
         }
 
         $this->authorize('remove', compact('log'));
 
-        $remove->removeLog($log);
+        $source->removeLog($log);
 
-        $uri = $this->vault->uri('logs');
+        $uri = $this->removeBackURI($request);
+
         if ($this->input->isAjax()) {
             return [
                 'status'  => 200,
@@ -131,35 +109,25 @@ class LogViewerController extends Controller
                 'action'  => ['redirect' => $uri]
             ];
         } else {
-            return $this->responses->redirect($uri);
+            return $this->response->redirect($uri);
         }
     }
 
     /**
-     * @param LogsSource    $source
-     * @param RemoveService $remove
-     * @return array|\Psr\Http\Message\ResponseInterface
+     * Build redirect URI for removal operation.
+     *
+     * @param ServerRequestInterface $request
+     * @return \Psr\Http\Message\UriInterface
      */
-    public function removeRotationAction(LogsSource $source, RemoveService $remove)
+    protected function removeBackURI(ServerRequestInterface $request)
     {
-        $rotation = $source->findRotation($this->input->query('filename'));
-        if (empty($rotation)) {
-            throw new NotFoundException;
-        }
-
-        $this->authorize('remove', compact('rotation'));
-
-        $remove->removeRotation($rotation);
-
-        $uri = $this->vault->uri('logs:log', ['id' => $rotation->getName()]);
-        if ($this->input->isAjax()) {
-            return [
-                'status'  => 200,
-                'message' => $this->say('Log rotation deleted.'),
-                'action'  => ['redirect' => $uri]
-            ];
+        $query = $request->getQueryParams();
+        if (array_key_exists('backToList', $query)) {
+            $uri = $this->vault->uri('logs');
         } else {
-            return $this->responses->redirect($uri);
+            $uri = $request->getServerParams()['HTTP_REFERER'];
         }
+
+        return $uri;
     }
 }
