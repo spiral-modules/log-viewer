@@ -27,6 +27,4 @@ Be sure that you have `navigation.vault` placeholder in `modules/vault` config l
 ```
 
 #todo-list
-1. Add charts/widgets
-2. Add listing dependency
-3. Tests
+1. Add paginator
