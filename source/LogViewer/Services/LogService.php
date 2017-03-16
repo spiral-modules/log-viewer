@@ -43,10 +43,11 @@ class LogService
         $logs = [];
         $files = $this->finder->files()->sortByName()->in($this->config->directories());
 
+        /** @var SplFileInfo $file */
         foreach ($files as $file) {
-            /** @var SplFileInfo $file */
-            $logs[$file->getFilename()] = new LogFile($file);
-            $order[] = $this->files->time($file);
+            $filename = $file->getFilename();
+            $logs[$filename] = new LogFile($file);
+            $order[$filename] = $this->files->time($file);
         }
 
         array_multisort($order, SORT_DESC, $logs);
