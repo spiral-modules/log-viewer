@@ -20,7 +20,7 @@ class LogServiceTest extends HttpTest
         /** @var LogService $service */
         $service = $this->container->get(LogService::class);
 
-        $this->assertEmpty($service->getLogs());
+        $this->assertCount(0, $service->getLogs());
 
         $snapshot = $this->makeSnapshot('error', 123);
         $snapshot->report();
@@ -30,7 +30,7 @@ class LogServiceTest extends HttpTest
         $this->get('/controller/action');
         $this->assertCount(2, $service->getLogs());
 
-        $log = current($service->getLogs());
+        $log = current($service->getLogs()->iterate());
         $this->assertInstanceOf(LogFile::class, $log);
     }
 
@@ -95,7 +95,7 @@ class LogServiceTest extends HttpTest
         /** @var LogService $service */
         $service = $this->container->get(LogService::class);
 
-        $this->assertEmpty($service->getLogs());
+        $this->assertCount(0, $service->getLogs());
 
         $snapshot = $this->makeSnapshot('error', 123);
         $snapshot->report();
@@ -118,7 +118,7 @@ class LogServiceTest extends HttpTest
         /** @var LogService $service */
         $service = $this->container->get(LogService::class);
 
-        $this->assertEmpty($service->getLogs());
+        $this->assertCount(0, $service->getLogs());
 
         $snapshot = $this->makeSnapshot('error', 123);
         $snapshot->report();
