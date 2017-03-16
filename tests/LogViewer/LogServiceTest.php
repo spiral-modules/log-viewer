@@ -53,9 +53,10 @@ class LogServiceTest extends HttpTest
         $this->assertNotEmpty($last);
         $this->assertInstanceOf(LogFile::class, $last);
 
+        sleep(1);
         $this->get('/controller/action');
 
-        /** @var LogFile $last */
+        /** @var LogFile $last2 */
         $last2 = $service->lastLog();
         $this->assertNotEmpty($last2);
 
