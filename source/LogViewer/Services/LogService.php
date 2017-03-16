@@ -39,13 +39,17 @@ class LogService
      */
     public function getLogs(): PaginableArray
     {
+        $order = [];
         $logs = [];
         $files = $this->finder->files()->sortByName()->in($this->config->directories());
 
         foreach ($files as $file) {
             /** @var SplFileInfo $file */
             $logs[$file->getFilename()] = new LogFile($file);
+            $order[] = $this->files->time($file);
         }
+
+        array_multisort($order, SORT_DESC, $logs);
 
         return new PaginableArray($logs);
     }
