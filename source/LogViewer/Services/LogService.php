@@ -7,6 +7,7 @@ use Spiral\LogViewer\Config;
 use Spiral\LogViewer\Entities\LogFile;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Vvval\Spiral\PaginableArray;
 
 class LogService
 {
@@ -34,9 +35,9 @@ class LogService
     }
 
     /**
-     * @return array
+     * @return PaginableArray
      */
-    public function getLogs(): array
+    public function getLogs(): PaginableArray
     {
         $logs = [];
         $files = $this->finder->files()->sortByName()->in($this->config->directories());
@@ -46,7 +47,7 @@ class LogService
             $logs[$file->getFilename()] = new LogFile($file);
         }
 
-        return $logs;
+        return new PaginableArray($logs);
     }
 
     /**
