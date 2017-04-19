@@ -33,15 +33,6 @@ class LogViewerModule implements ModuleInterface
         $registrator->configure('modules/vault', 'controllers', 'spiral/log-viewer', [
             "'logs' => \\Spiral\\LogViewer\\Controllers\\LogViewerController::class,",
         ]);
-
-        //Register menu item in navigation config
-        $registrator->configure('modules/vault', 'navigation.vault', 'spiral/log-viewer', [
-            "'logs' => [",
-            "    'title'    => 'Logs',",
-            "    'requires' => 'vault.logs'",
-            "],",
-            "/*{{navigation.vault.logs}}*/",
-        ]);
     }
 
     /**

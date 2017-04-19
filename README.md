@@ -13,17 +13,13 @@ composer require spiral/log-viewer
 spiral register spiral/log-viewer
 ```
 
-### Include logs link into navigation menu (optional)
+### Include logs link into navigation menu like below (optional):
 
-Be sure that you have `navigation.vault` placeholder in `modules/vault` config like this
 ```php
-'vault'    => [
-    'title' => 'Vault',
-    'icon'  => 'power_settings_new',
-    'items' => [
-        /*{{navigation.vault}}*/
-    ]
-]
+'logs'      => [
+    'title'    => 'Logs',
+    'requires' => 'vault.logs'
+],
 ```
 
 #todo-list
