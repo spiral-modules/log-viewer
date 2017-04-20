@@ -62,12 +62,12 @@
         </grid:cell>
         <grid:cell style="text-align:right">
             <vault:guard permission="vault.logs.view">
-                <vault:uri target="logs:view" icon="edit"
+                <vault:uri target="logs:view" icon="import_contacts" title="[[View log]]"
                            options="<?= ['filename' => $entity->name()] ?>"
-                           class="btn-flat waves-effect"/>
+                           class="btn teal waves-effect"/>
             </vault:guard>
             <vault:guard permission="vault.logs.remove">
-                <vault:uri target="logs:remove" icon="delete"
+                <vault:uri target="logs:remove" icon="delete" title="[[Remove log]]"
                            class="btn red waves-effect waves-light"
                            options="<?= ['filename' => $entity->name()] ?>"></vault:uri>
             </vault:guard>
