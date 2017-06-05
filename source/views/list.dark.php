@@ -39,7 +39,7 @@
                 <div class="col s12 m2 right-align">
                     <vault:guard permission="vault.logs.view">
                         <vault:uri target="logs:view" icon="edit"
-                                   class="btn teal waves-effect waves-light"
+                                   class="btn  waves-effect waves-light"
                                    options="<?= ['filename' => $lastLog->name()] ?>">
                             [[View last]]
                         </vault:uri>
@@ -49,7 +49,7 @@
         </vault:card>
     <?php } ?>
 
-    <vault:grid source="<?= $selector ?>" as="entity" color="teal">
+    <vault:grid source="<?= $selector ?>" as="entity" color="">
         <grid:cell label="[[Filename:]]">
             <span title="<?= $entity->filename() ?>"><?= $entity->name() ?></span>
         </grid:cell>
@@ -64,7 +64,7 @@
             <vault:guard permission="vault.logs.view">
                 <vault:uri target="logs:view" icon="import_contacts" title="[[View log]]"
                            options="<?= ['filename' => $entity->name()] ?>"
-                           class="btn teal waves-effect"/>
+                           class="btn  waves-effect"/>
             </vault:guard>
             <vault:guard permission="vault.logs.remove">
                 <vault:uri target="logs:remove" icon="delete" title="[[Remove log]]"

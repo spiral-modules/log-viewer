@@ -13,7 +13,7 @@
             [[Remove all]]
         </vault:uri>
     </vault:guard>
-    <vault:uri target="logs" class="btn-flat teal-text waves-effect" post-icon="trending_flat">
+    <vault:uri target="logs" class="btn-flat  waves-effect" post-icon="trending_flat">
         [[BACK]]
     </vault:uri>
 </define:actions>
@@ -25,7 +25,7 @@
             [[Remove]]
         </vault:uri>
     </vault:guard>
-    <vault:uri target="logs" class="btn-flat teal-text waves-effect" post-icon="trending_flat">
+    <vault:uri target="logs" class="btn-flat  waves-effect" post-icon="trending_flat">
         [[BACK]]
     </vault:uri>
 </define:actions>
